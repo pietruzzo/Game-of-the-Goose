@@ -1,2 +1,9 @@
 # Game-of-the-Goose
-Traditional board game implemented in JavaFX and sockets
+
+## (Gioco dell'Oca)
+
+Traditional board game implemented in JavaFX with sockets (Client-Server).
+
+(italian)
+
+Developed by [mikmaro](https://github.com/mickmaro) and pietruzzo.
