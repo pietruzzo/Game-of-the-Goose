@@ -1,0 +1,64 @@
+0	240	680	Si Parte!
+1	330	700
+2	400	725
+3	480	740
+4	550	735
+5	630	735	L'oca torna sui suoi passi...
+6	710	735	Un Ponte verso terre lontne
+7	780	710
+8	850	680	Uno Scoiattolo
+9	900	635	L'oca spicca il volo e raddoppia!
+10	955	580
+11	990	520
+12	1005	451
+13	1010	375
+14	990	305	L'oca ha dimenticato qualcosa...
+15	950	245
+16	900	200
+17	840	150
+18	770	120
+19	695	100	L'oca si riposa alla locanda (fermo x3)
+20	620	95
+21	545	95
+22	470	100
+23	395	120	L'oca spicca il volo e raddoppia!
+24	325	150
+25	260	185
+26	215	245	L'oca fortunata lancia ancora!
+27	185	305
+28	170	375
+29	180	450
+30	220	510
+31	270	555	L'oca distratta cade nel pozzo
+32	330	600
+33	400	625
+34	475	640
+35	550	650
+36	630	650	Delle orme...
+37	705	635
+38	770	605
+39	835	565
+40	880	515
+41	910	450
+42	910	390	L'oca si è persa... (fermo)
+43	895	320
+44	850	270
+45	790	230	L'oca torna indietro...
+46	720	200
+47	650	195
+48	570	190
+49	500	200
+50	425	215
+51	360	245	L'oca è finita in prigione (fermo)
+52	305	290
+53	280	345	L'oca fortunata lancia ancora!
+54	280	410	L'oca torna indietro...
+55	315	465
+56	360	510
+57	430	535
+58	500	550	L'oca Muore... si ricomincia!
+59	576	550
+60	650	545
+61	720	525
+62	775	490
+63	810	430	Vittoria!!!
