@@ -20,14 +20,17 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.ToggleGroup;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -39,18 +42,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.WindowEvent;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -92,7 +89,7 @@ public class OCA_Client_FX extends Application {
     public void start(Stage finestra_principale) throws IOException {
 
         finestra_principale.setTitle("Gioco dell'Oca");
-        finestra_principale.getIcons().add(new Image("Img/paperella.png"));
+        finestra_principale.getIcons().add(new Image("paperella.png"));
         finestra_principale.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
@@ -116,10 +113,8 @@ public class OCA_Client_FX extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void run(String[] args) {
         sessione = new Client();
-        //Thread th_client = new Thread(sessione);
-        //th_client.start();
         launch(args);
     }
 
@@ -147,7 +142,7 @@ public class OCA_Client_FX extends Application {
         });
         
         //Terreno di gioco
-        Image sfondo = new Image("/Img/Tab2.jpg", terreno_X * scala, terreno_Y * scala, true, true);
+        Image sfondo = new Image("Tab2.jpg", terreno_X * scala, terreno_Y * scala, true, true);
         ImageView vi_sfondo = new ImageView(sfondo);
         terreno = new Pane(vi_sfondo);
         
@@ -156,7 +151,7 @@ public class OCA_Client_FX extends Application {
         String percorso_faccia;
         for (int i = 0; i < dadi[0].length; i++) {
             for (int j = 0; j < 2; j++) {
-                percorso_faccia = "Img/dado_"+(i+1)+".png"; 
+                percorso_faccia = "dado_"+(i+1)+".png";
                 dadi[j][i]= new ImageView(new Image(percorso_faccia));
                 dadi[j][i].setVisible(false);
                 if (j==0) {
@@ -173,7 +168,7 @@ public class OCA_Client_FX extends Application {
         
         
         //AGGIUNGERE COORDINATE
-        InputStream is = getClass().getClassLoader().getResourceAsStream("files/coordinate_caselle.txt");
+        InputStream is = getClass().getClassLoader().getResourceAsStream("coordinate_caselle.txt");
         Reader file_caselle = new InputStreamReader(is);
         //FileReader file_caselle = new FileReader("/home/pietro/NetBeansProjects/OCA_Client_FX/src/files/coordinate_caselle.txt");
 
@@ -188,7 +183,7 @@ public class OCA_Client_FX extends Application {
             } else if (elementi_stringa.length > 2) {
                 vettore_caselle[i] = new casella(Integer.parseInt(elementi_stringa[1]), Integer.parseInt(elementi_stringa[2]));
             } else {
-                System.out.println("ERRORE caricamento elemento" + i + "dal file 'files/coordinate_caselle.txt'");
+                System.out.println("ERRORE caricamento elemento" + i + "dal file 'coordinate_caselle.txt'");
                 System.out.println(linea_testo);
             }
         }
@@ -326,14 +321,22 @@ public class OCA_Client_FX extends Application {
         pannello_radio.setVgap(5);
         Text scelta_nome_text = new Text("Nome giocatore:");
         Text scelta_colore_text = new Text("Colore pedina:");
+        Text serverIP_text = new Text("ipServer:port");
         TextArea scelta_nome_area = new TextArea();
+        TextArea serverIP_area = new TextArea("127.0.0.1:1337");
         
         scelta_nome_text.setFont(Font.font("Trebuchet MS", 15));
         scelta_colore_text.setFont(Font.font("Trebuchet MS", 15));
+        serverIP_text.setFont(Font.font("Trebuchet MS", 15));
         scelta_nome_area.setFont(Font.font("Trebuchet MS", 15));
+        serverIP_area.setFont(Font.font("Trebuchet MS", 15));
+
+
         
         scelta_nome_area.setPrefWidth(220);
         scelta_nome_area.setPrefRowCount(1);
+        serverIP_area.setPrefWidth(220);
+        serverIP_area.setPrefRowCount(1);
         pannello_play.setHgap(10);
         pannello_play.setVgap(10);
 
@@ -382,8 +385,10 @@ public class OCA_Client_FX extends Application {
         
         
         pannello_play.add(scelta_nome_text, 0, 0);
-        pannello_play.add(scelta_nome_area, 0, 1);
-        pannello_play.add(play, 0, 2);
+        pannello_play.add(scelta_nome_area, 1, 0);
+        pannello_play.add(serverIP_text, 0, 1);
+        pannello_play.add(serverIP_area, 1, 1);
+        pannello_play.add(play, 1, 2);
         GridPane.setHalignment(play, HPos.CENTER);
         GridPane.setMargin(pannello_play, new Insets(15,0,10,0));
         
@@ -391,6 +396,25 @@ public class OCA_Client_FX extends Application {
             @Override
             public void handle(MouseEvent event) {
                 System.out.println("CLICKED_play");
+
+                //Verifica stinga IP e Porta
+                String ip;
+                int porta;
+
+                Pattern pattern = Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}:\\d{1,5}");
+
+                String stringaCompleta = serverIP_area.getText().trim().replace(" ", "");
+
+                Matcher matcher = pattern.matcher(stringaCompleta);
+
+                if (!matcher.matches()) {
+                    serverIP_area.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(2))));
+                    serverIP_text.setText("malformed IP:port address");
+                    return;
+                }
+                ip = stringaCompleta.split(":")[0];
+                porta = Integer.parseInt(stringaCompleta.split(":")[1]);
+
                 Toggle scelta = scelta_colore.getSelectedToggle();
                 Color colore_scelto;
                 String colore_stringa; 
@@ -423,19 +447,31 @@ public class OCA_Client_FX extends Application {
                     colore_stringa = "";
                     System.out.println("ERRORE nella selezione radiobutton");
                 }
-                
-                Boolean esito =sessione.proposta_pedine(colore_scelto);
+
+                Boolean esito = null;
+                try {
+                    esito = sessione.proposta_pedine(colore_scelto, scelta_nome_area.getText(), ip, porta);
+                } catch (IllegalArgumentException e) {
+                    serverIP_area.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(2))));
+                    serverIP_text.setText("port out of range 0-65535");
+                    return;
+                } catch (IOException e) {
+                    serverIP_area.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(2))));
+                    serverIP_text.setText("connection failed");
+                    return;
+                }
+
                 if (esito == true) {
                     sessione.setta_pedina(colore_scelto, scelta_nome_area.getText());
                     finestra_principale.getIcons().clear();
-                    finestra_principale.getIcons().add(new Image(String.format("Img/paperella%s.png", colore_stringa)));
+                    finestra_principale.getIcons().add(new Image(String.format("paperella%s.png", colore_stringa)));
                     finestra_principale.setTitle(String.format("Gioco dell'Oca - Giocatore: %s", scelta_nome_area.getText()));
                     finestra_principale.setScene(campo_gioco());
                     finestra_principale.show();
                 }
                 else{
                     Stage stage_conferma = new Stage();
-                    stage_conferma.setTitle("Procedere?");
+                    stage_conferma.setTitle("colore già scelto");
                     Button ok= new Button("OK");
                     Button no= new Button("NO");
                     Text procedi= new Text("Procedere comunque?");
@@ -470,7 +506,7 @@ public class OCA_Client_FX extends Application {
 
         //BackgroundFill myBF = new BackgroundFill(Color.BEIGE, new CornerRadii(1), null);
         
-        BackgroundImage myBI= new BackgroundImage(new Image("Img/background.jpg", 250,250,false, true),
+        BackgroundImage myBI= new BackgroundImage(new Image("background.jpg", 250,250,false, true),
         BackgroundRepeat.ROUND, BackgroundRepeat.ROUND, BackgroundPosition.DEFAULT,
           BackgroundSize.DEFAULT);
          
@@ -550,7 +586,7 @@ public class OCA_Client_FX extends Application {
     public static void ridimensiona_terreno() {
         //Sostituisci l'immagine
         terreno.getChildren().clear();
-        terreno.getChildren().add(new ImageView(new Image("Img/Tab2.jpg", (int) (terreno_X * scala), (int) (terreno_Y * scala), true, true)));
+        terreno.getChildren().add(new ImageView(new Image("Tab2.jpg", (int) (terreno_X * scala), (int) (terreno_Y * scala), true, true)));
         
         //Riposiziona dadi
         for (int i = 0; i < dadi[0].length; i++) {

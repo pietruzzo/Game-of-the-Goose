@@ -1,11 +1,9 @@
 package ClientCommunication;
 
-import Domain.Casella;
-import Domain.EffettoCasella;
+
 import Domain.GiocaResult;
 import Domain.Pedina;
 import Messages.*;
-import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

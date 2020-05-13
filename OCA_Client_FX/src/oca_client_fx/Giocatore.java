@@ -51,31 +51,31 @@ public class Giocatore {
     public Image carica_im_papera(int W, int H){
         
          if (colore==Color.BLACK || colore.toString().equals(Color.BLACK.toString())) {
-            dir_pap="Img/paperella-black.png";
+            dir_pap="paperella-black.png";
         }
         else if(colore == Color.RED || colore.toString().equals(Color.RED.toString())){
-            dir_pap="Img/paperella-red.png";
+            dir_pap="paperella-red.png";
         }
         else if (colore == Color.BLUE || colore.toString().equals(Color.BLUE.toString())) {
-            dir_pap="Img/paperella-blue.png";
+            dir_pap="paperella-blue.png";
         }
         else if (colore == Color.WHITE || colore.toString().equals(Color.WHITE.toString())) {
-            dir_pap="Img/paperella-white.png";
+            dir_pap="paperella-white.png";
         }
         else if (colore == Color.YELLOW || colore.toString().equals(Color.YELLOW.toString())) {
-            dir_pap="Img/paperella-yellow.png";
+            dir_pap="paperella-yellow.png";
         }
         else if (colore == Color.GREEN || colore.toString().equals(Color.GREEN.toString())) {
-            dir_pap="Img/paperella-green.png";
+            dir_pap="paperella-green.png";
         }
         else if (colore == Color.VIOLET || colore.toString().equals(Color.VIOLET.toString())) {
-            dir_pap="Img/paperella-violet.png";
+            dir_pap="paperella-violet.png";
         }
         else if (colore == Color.AZURE || colore.toString().equals(Color.AZURE.toString())) {
-            dir_pap="Img/paperella-azure.png";
+            dir_pap="paperella-azure.png";
         }
         else{
-            dir_pap="Img/paperella.png";
+            dir_pap="paperella.png";
         }
         return new Image (dir_pap, W, H, true, true);
     }

@@ -31,8 +31,13 @@ public class Client {
         FALSE la pedina è già stata scelta
         TRUE  la pedina non è stata scelta
      */
-    public Boolean proposta_pedine(Color colore) {
+    public Boolean proposta_pedine(Color colore, String nome, String ipServer, int port) throws IOException, IllegalArgumentException{
         System.out.println("PropostaPedine");
+        if (this.clientCommunication == null) {
+            this.clientCommunication = new ServerCommunication(ipServer, port, colore, nome);
+            Thread thread = new Thread(this.clientCommunication);
+            thread.start();
+        }
         return true;
     }
 
@@ -45,9 +50,7 @@ public class Client {
      */
     public void setta_pedina(Color colore, String nome) {
         System.out.println("SettaPedine " + nome);
-        this.clientCommunication = new ServerCommunication("127.0.0.1", 1337, colore, nome);
-        Thread thread = new Thread(this.clientCommunication);
-        thread.start();
+
     }
 
     /*

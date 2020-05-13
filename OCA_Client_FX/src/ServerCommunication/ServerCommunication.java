@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -29,16 +30,20 @@ public class ServerCommunication implements Runnable{
     
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
+
+    private MessageFromServer response;
     
     static Semaphore mutex = new Semaphore(1);
     
-    public ServerCommunication(String ip, int port, Color colore, String nome) {
+    public ServerCommunication(String ip, int port, Color colore, String nome) throws IOException, IllegalArgumentException{
         this.ip = ip;
         this.port = port;
         this.colore = colore;
         this.nomePedina = nome;
+
+        openConnection();
     }
-    
+
     
     @Override
     public void run() {
@@ -50,18 +55,23 @@ public class ServerCommunication implements Runnable{
         } catch (InterruptedException ex) {
             Logger.getLogger(ServerCommunication.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
-    public void startClient() throws IOException, InterruptedException {
+
+    private void openConnection() throws IOException {
         socket = new Socket(ip, port);
         System.out.println("Connection established");
-        
+
         oos = new ObjectOutputStream(socket.getOutputStream());
         oos.flush();
-        ois = new ObjectInputStream(socket.getInputStream());       
-                
-        MessageFromServer response = this.SendMessageToServer(TypeMessage.NewPedina, /*chat message*/null);
+        ois = new ObjectInputStream(socket.getInputStream());
+
+        response = this.SendMessageToServer(TypeMessage.NewPedina, /*chat message*/null);
+    }
+
+
+    public void startClient() throws IOException, InterruptedException {
+
         
         //Creare la pedina con i dati scelti dall'utente
         Giocatore player = new Giocatore(response.IdPedina, this.nomePedina, this.colore);

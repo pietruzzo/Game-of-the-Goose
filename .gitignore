@@ -1,0 +1,5 @@
+.idea/
+/manifest.mf
+/build.xml
+out/
+/target/
